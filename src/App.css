@@ -1,0 +1,5 @@
+/* Only keeping minimal styles needed for layout */
+#root {
+  width: 100%;
+  margin: 0 auto;
+}

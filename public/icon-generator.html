@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PWA Icon Generator</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    canvas {
+      border: 1px solid #ddd;
+      margin: 20px 0;
+      background-color: white;
+    }
+    .btn {
+      padding: 10px 20px;
+      background-color: #4A90E2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .btn:hover {
+      background-color: #3A80D2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Life Calendar PWA Icon Generator</h1>
+  <canvas id="canvas192" width="192" height="192"></canvas>
+  <canvas id="canvas512" width="512" height="512"></canvas>
+  <div>
+    <button class="btn" id="downloadBtn">Download Icons</button>
+  </div>
+
+  <script>
+    // Function to draw the icon
+    function drawIcon(canvas, size) {
+      const ctx = canvas.getContext('2d');
+      
+      // Background
+      ctx.fillStyle = '#4A90E2';
+      ctx.fillRect(0, 0, size, size);
+      
+      // Draw calendar grid
+      const padding = size * 0.15;
+      const gridSize = size - (padding * 2);
+      const rows = 5;
+      const cols = 7;
+      const cellSize = gridSize / Math.max(rows, cols);
+      
+      // Draw cells
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          // Calculate position
+          const x = padding + (col * cellSize);
+          const y = padding + (row * cellSize);
+          
+          // Random color selection for some cells
+          if (Math.random() > 0.7) {
+            ctx.fillStyle = '#FFFFFF';
+          } else if (Math.random() > 0.5) {
+            ctx.fillStyle = '#88BBFF';
+          } else {
+            ctx.fillStyle = '#2A70C2';
+          }
+          
+          // Draw cell with a small margin
+          const margin = cellSize * 0.1;
+          ctx.fillRect(
+            x + margin, 
+            y + margin, 
+            cellSize - (margin * 2), 
+            cellSize - (margin * 2)
+          );
+        }
+      }
+      
+      // Add outer circle for maskable icon
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = size * 0.03;
+      ctx.beginPath();
+      ctx.arc(size/2, size/2, size * 0.45, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    
+    // Draw icons
+    drawIcon(document.getElementById('canvas192'), 192);
+    drawIcon(document.getElementById('canvas512'), 512);
+    
+    // Download functionality
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+      // Download 192x192 icon
+      const link192 = document.createElement('a');
+      link192.download = 'pwa-192x192.png';
+      link192.href = document.getElementById('canvas192').toDataURL('image/png');
+      link192.click();
+      
+      // Short delay before second download
+      setTimeout(() => {
+        // Download 512x512 icon
+        const link512 = document.createElement('a');
+        link512.download = 'pwa-512x512.png';
+        link512.href = document.getElementById('canvas512').toDataURL('image/png');
+        link512.click();
+      }, 100);
+    });
+  </script>
+</body>
+</html>
